@@ -1222,7 +1222,8 @@ class NisqaModel:
 
         # Add batch dimension
         spec_seg = spec_seg.unsqueeze(0)
-        n_wins = torch.tensor([n_wins])
+        # n_wins is a numpy scalar, convert to tensor with shape [1]
+        n_wins = torch.tensor([int(n_wins)])
 
         # Move to device
         spec_seg = spec_seg.to(self.device)
