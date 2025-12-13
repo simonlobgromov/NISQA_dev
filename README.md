@@ -71,10 +71,15 @@ result = model(filepath='path/to/audio.wav')
 ```python
 import numpy as np
 
-# Your audio waveform as numpy array
+# Your audio waveform as numpy array (assumes 48kHz sample rate)
 audio = np.random.randn(48000)  # Example: 1 second at 48kHz
 
 result = model(waveform=audio)
+
+# Or specify sample rate explicitly
+import librosa
+audio, sr = librosa.load('audio.wav', sr=None)
+result = model(waveform=audio, sr=sr)
 ```
 
 **From PyTorch tensor:**
@@ -82,7 +87,7 @@ result = model(waveform=audio)
 import torch
 
 audio = torch.randn(48000)
-result = model(waveform=audio)
+result = model(waveform=audio, sr=48000)
 ```
 
 ### Output Format

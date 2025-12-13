@@ -19,9 +19,15 @@ print(f"  Loudness:    {result['loud_pred']:.2f}")
 
 # Example 2: Predict from waveform (numpy array)
 # Assuming you have loaded audio as a numpy array
-# audio_array = librosa.load('path/to/audio.wav', sr=None)[0]
-# result = model(waveform=audio_array)
+# import librosa
+# audio_array, sample_rate = librosa.load('path/to/audio.wav', sr=None)
+# result = model(waveform=audio_array, sr=sample_rate)
 # print("\nPredictions from waveform:")
+# print(result)
+
+# Example 2b: Waveform with default 48kHz sample rate
+# audio_48k = np.random.randn(48000)  # 1 second at 48kHz
+# result = model(waveform=audio_48k)  # sr defaults to 48000
 # print(result)
 
 # Example 3: Using different model weights

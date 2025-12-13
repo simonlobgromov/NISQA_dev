@@ -1061,8 +1061,9 @@ def waveform_to_melspec(
     if len(y.shape) > 1:
         y = y.flatten()
 
-    hop_length = int(sr * hop_length / 1000000)  # Convert from microseconds
-    win_length = int(sr * win_length / 1000000)
+    # hop_length and win_length are in seconds
+    hop_length = int(sr * hop_length)
+    win_length = int(sr * win_length)
 
     S = lb.feature.melspectrogram(
         y=y,
@@ -1172,13 +1173,14 @@ class NisqaModel:
         self.model.to(self.device)
         self.model.eval()
 
-    def __call__(self, waveform=None, filepath=None):
+    def __call__(self, waveform=None, filepath=None, sr=None):
         """
         Predict speech quality.
 
         Args:
             waveform: np.ndarray or torch.Tensor audio (optional)
             filepath: str path to audio file (optional)
+            sr: sample rate of waveform in Hz (optional, defaults to 48000 if not specified)
 
         Returns:
             dict with keys: 'mos_pred', 'noi_pred', 'dis_pred', 'col_pred', 'loud_pred'
@@ -1202,9 +1204,17 @@ class NisqaModel:
                 ms_channel=self.args.get('ms_channel', None)
             )
         else:
+            # Use provided sr, or default to model's sr, or 48kHz if both are None
+            if sr is not None:
+                sample_rate = sr
+            elif self.args['ms_sr'] is not None:
+                sample_rate = self.args['ms_sr']
+            else:
+                sample_rate = 48000
+
             spec = waveform_to_melspec(
                 waveform,
-                sr=self.args['ms_sr'],
+                sr=sample_rate,
                 n_fft=self.args['ms_n_fft'],
                 hop_length=self.args['ms_hop_length'],
                 win_length=self.args['ms_win_length'],
