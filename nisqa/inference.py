@@ -1093,11 +1093,11 @@ class NisqaModel:
     NISQA Model for speech quality prediction (inference only).
 
     Usage:
-        model = NisqaModel(model_path='weights/nisqa.tar')
+        model = NisqaModel(model_path='nisqa/weights/nisqa.tar')
         result = model(waveform=audio_array)  # or filepath='path/to/audio.wav'
     """
 
-    def __init__(self, model_path='weights/nisqa.tar', device=None):
+    def __init__(self, model_path='nisqa/weights/nisqa.tar', device=None):
         """
         Args:
             model_path: Path to pretrained model (.tar file)
